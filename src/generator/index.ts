@@ -21,7 +21,7 @@ function createRandomCustomer(): Customer {
   };
 }
 
-/// This function is a generator function. It will yield a new
+/// This is a generator function. It will yield a new
 /// array of customers every 200ms.
 export async function* generateCustomers() {
   while (true) {

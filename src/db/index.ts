@@ -10,3 +10,8 @@ const mongoClient = new MongoClient(mongoUri);
 
 export const db = mongoClient.db("obfuscation");
 export const customersCollection = db.collection<Customer>("customers");
+export const customersAnonymisedCollection = db.collection<Customer>(
+  "customers_anonymised"
+);
+
+export { getCustomersChangesStream } from "./changes";

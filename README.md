@@ -1,5 +1,6 @@
 # Prerequisites
-I used Node 18 for this project, it may or may not run on other versions
+- I used Node 18 for this project, it may or may not run on other versions
+- 
 
 # How to run
 1. Clone the repo

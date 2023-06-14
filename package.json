@@ -4,11 +4,13 @@
   "description": "",
   "main": "dist/app.js",
   "scripts": {
-    "dev:app": "tsc-watch --onSuccess \"node dist/app.js\"",
-    "dev:sync": "tsc-watch --onSuccess \"node dist/sync.js\"",
+    "dev:app": "tsc-watch --onSuccess \"node --inspect dist/app.js\"",
+    "dev:sync": "tsc-watch --onSuccess \"node --inspect dist/sync.js\"",
+    "dev:sync:full": "tsc-watch --onSuccess \"node --inspect dist/sync.js --full-reindex\"",
     "build": "rimraf dist && tsc",
     "start:app": "node dist/app.js",
-    "start:sync": "node dist/sync.js"
+    "start:sync": "node dist/sync.js",
+    "start:sync:full": "node dist/sync.js --full-reindex"
   },
   "author": "",
   "license": "ISC",

@@ -1,6 +1,6 @@
-import { Customer } from "../types/customer";
+import { Customer } from "../../types/customer";
 import { faker } from "@faker-js/faker";
-import { waitForDelay } from "../utils/waitForDelay";
+import { waitForDelay } from "../../utils/waitForDelay";
 
 function createRandomCustomer(): Customer {
   return {

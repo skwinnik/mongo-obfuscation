@@ -1,4 +1,4 @@
-import { resumeTokensCollection } from "../../collections";
+import { resumeTokensCollection } from "../db/collections";
 
 export async function saveResumeToken(
   collectionName: string,

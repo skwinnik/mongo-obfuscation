@@ -1,20 +1,20 @@
 import {
-  CustomerChange,
+  CustomerEvent,
   InsertCustomerEvent,
   InsertCustomerDocument,
   UpdateCustomerEvent,
   UpdateCustomerDocument,
-} from "../types/customer";
-import { customersCollection } from "../../collections";
-import { Customer, PartialCustomerFlat } from "../../../types/customer";
+} from ".";
+import { customersCollection } from "../../db/collections";
+import { Customer, PartialCustomerFlat } from "../../types/customer";
 import {
   ChangeStreamInsertDocument,
   ChangeStreamUpdateDocument,
 } from "mongodb";
 
-export async function* getCustomersChangesStream(
+export async function* getCustomerEventsStream(
   resumeToken: unknown | undefined
-): AsyncGenerator<CustomerChange> {
+): AsyncGenerator<CustomerEvent> {
   const changeStream = customersCollection.watch<
     Customer,
     | ChangeStreamInsertDocument<Customer>
@@ -34,18 +34,18 @@ export async function* getCustomersChangesStream(
 
   for await (const change of changeStream) {
     if (change.operationType === "insert") {
-      yield getInsertCustomerChange(change);
+      yield getInsertCustomerEvent(change);
       continue;
     }
 
     if (change.operationType === "update") {
-      yield getUpdateCustomerChange(change);
+      yield getUpdateCustomerEvent(change);
       continue;
     }
   }
 }
 
-function getUpdateCustomerChange(
+function getUpdateCustomerEvent(
   change: ChangeStreamUpdateDocument<PartialCustomerFlat>
 ): UpdateCustomerEvent {
   return {
@@ -59,7 +59,7 @@ function getUpdateCustomerChange(
   };
 }
 
-function getInsertCustomerChange(
+function getInsertCustomerEvent(
   change: ChangeStreamInsertDocument<Customer>
 ): InsertCustomerEvent {
   return {

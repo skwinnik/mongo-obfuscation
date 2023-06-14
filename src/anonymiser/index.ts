@@ -1,28 +1,26 @@
 import * as crypto from "crypto";
 import { Customer, PartialCustomerFlat } from "../types/customer";
-import { CustomerChange } from "../db/sync/types/customer";
+import { CustomerEvent } from "../customer/events";
 
-export function anonymiseCustomerChange(
-  change: CustomerChange
-): CustomerChange {
-  if (change.operationType === "insert") {
-    change.document = {
-      _id: change.document._id,
-      ...anonymiseCustomer(change.document),
+export function anonymiseCustomerEvent(event: CustomerEvent): CustomerEvent {
+  if (event.operationType === "insert" || event.operationType === "replace") {
+    event.document = {
+      _id: event.document._id,
+      ...anonymiseCustomer(event.document),
     };
   }
 
-  if (change.operationType === "update") {
-    change.document = {
-      _id: change.document._id,
-      removeFields: change.document.removeFields,
-      updateFields: change.document.updateFields
-        ? anonymisePartialCustomer(change.document.updateFields)
+  if (event.operationType === "update") {
+    event.document = {
+      _id: event.document._id,
+      removeFields: event.document.removeFields,
+      updateFields: event.document.updateFields
+        ? anonymisePartialCustomer(event.document.updateFields)
         : undefined,
     };
   }
 
-  return change;
+  return event;
 }
 
 function anonymiseCustomer(customer: Customer): Customer {

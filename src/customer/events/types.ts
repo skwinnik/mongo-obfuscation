@@ -1,4 +1,4 @@
-import { Customer, PartialCustomerFlat } from "../../../types/customer";
+import { Customer, PartialCustomerFlat } from "../../types/customer";
 import { ObjectId } from "mongodb";
 
 type DocumentId = { _id: ObjectId };
@@ -28,7 +28,7 @@ export type ReplaceCustomerEvent = {
   document: ReplaceCustomerDocument;
 } & CommonCustomerEvent;
 
-export type CustomerChange =
+export type CustomerEvent =
   | InsertCustomerEvent
   | UpdateCustomerEvent
   | ReplaceCustomerEvent;

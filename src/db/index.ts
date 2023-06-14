@@ -4,3 +4,5 @@ export {
   customersCollection,
   customersAnonymisedCollection,
 } from "./collections";
+
+export { WriteBuffer } from "./buffer";

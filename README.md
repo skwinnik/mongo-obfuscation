@@ -1,6 +1,6 @@
 # Prerequisites
 - I used Node 18 for this project, it may or may not run on other versions
-- 
+- MongoDB should be in ReplicaSet mode, required for Change Stream feature
 
 # How to run
 1. Clone the repo

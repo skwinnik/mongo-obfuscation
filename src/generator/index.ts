@@ -5,7 +5,6 @@ import { waitForDelay } from "../utils/waitForDelay";
 
 function createRandomCustomer(): Customer {
   return {
-    _id: new ObjectId(),
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
     email: faker.internet.email(),

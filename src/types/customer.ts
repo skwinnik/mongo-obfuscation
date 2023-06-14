@@ -15,11 +15,7 @@ export type CustomerAddress = {
   country: string;
 };
 
-export type PartialCustomer = Omit<Partial<Customer>, "address"> & {
-  address: Partial<CustomerAddress>;
-};
-
-export type PartialCustomerFlat = Omit<Partial<Customer>, "address"> & {
+export type PartialCustomerFlat = Partial<Customer> & {
   "address.line1": Partial<CustomerAddress>["line1"];
   "address.line2": Partial<CustomerAddress>["line2"];
   "address.postcode": Partial<CustomerAddress>["postcode"];

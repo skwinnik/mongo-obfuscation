@@ -26,7 +26,7 @@ export async function* generateCustomers() {
     yield faker.helpers.multiple(createRandomCustomer, {
       count: {
         min: 1,
-        max: 10,
+        max: 100,
       },
     });
     await waitForDelay(200);

@@ -1,7 +1,31 @@
 import * as crypto from "crypto";
 import { Customer, PartialCustomerFlat } from "../types/customer";
+import { CustomerChange } from "../db/sync/types/customer";
 
-export function anonymiseCustomer(customer: Customer): Customer {
+export function anonymiseCustomerChange(
+  change: CustomerChange
+): CustomerChange {
+  if (change.operationType === "insert") {
+    change.document = {
+      _id: change.document._id,
+      ...anonymiseCustomer(change.document),
+    };
+  }
+
+  if (change.operationType === "update") {
+    change.document = {
+      _id: change.document._id,
+      removeFields: change.document.removeFields,
+      updateFields: change.document.updateFields
+        ? anonymisePartialCustomer(change.document.updateFields)
+        : undefined,
+    };
+  }
+
+  return change;
+}
+
+function anonymiseCustomer(customer: Customer): Customer {
   return {
     ...customer,
     firstName: generateHash(customer.firstName),
@@ -16,7 +40,7 @@ export function anonymiseCustomer(customer: Customer): Customer {
   };
 }
 
-export function anonymisePartialCustomer(
+function anonymisePartialCustomer(
   partialCustomer: PartialCustomerFlat
 ): PartialCustomerFlat {
   const anonymisedCustomer = { ...partialCustomer };

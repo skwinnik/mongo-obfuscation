@@ -1,0 +1,1 @@
+export { getCustomersStreamGenerator } from "./stream";

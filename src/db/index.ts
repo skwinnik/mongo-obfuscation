@@ -4,5 +4,3 @@ export {
   customersCollection,
   customersAnonymisedCollection,
 } from "./collections";
-
-export { getCustomersChangesStream } from "./changes";

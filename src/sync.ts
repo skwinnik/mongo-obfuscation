@@ -2,7 +2,9 @@ import "dotenv/config";
 
 import { getCustomersChangesStream } from "./db";
 import { anonymiseCustomer, anonymisePartialCustomer } from "./anonymiser";
+import { CustomerAnonymisedWriter } from "./db/writes/customerAnonymised/writer";
 
+const writer = new CustomerAnonymisedWriter();
 async function run() {
   const changeStream = getCustomersChangesStream();
   for await (const change of changeStream) {
@@ -17,11 +19,13 @@ async function run() {
       change.change = {
         _id: change.change._id,
         removeFields: change.change.removeFields,
-        ...anonymisePartialCustomer(change.change),
+        updateFields: change.change.updateFields
+          ? anonymisePartialCustomer(change.change.updateFields)
+          : undefined,
       };
     }
 
-    console.log(change);
+    await writer.write(change);
   }
 }
 

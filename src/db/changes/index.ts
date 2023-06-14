@@ -1,1 +1,1 @@
-export { getCustomersChangesStream } from "./stream";
+export { getCustomersChangesStream } from "./customer/stream";

@@ -4,9 +4,9 @@ import {
   InsertCustomerDocument,
   UpdateCustomerChange,
   UpdateCustomerDocument,
-} from "./types/customer";
-import { customersCollection } from "../collections";
-import { Customer } from "../../types/customer";
+} from "../types/customer";
+import { customersCollection } from "../../collections";
+import { Customer, PartialCustomerFlat } from "../../../types/customer";
 import {
   ChangeStreamInsertDocument,
   ChangeStreamUpdateDocument,
@@ -16,7 +16,7 @@ export async function* getCustomersChangesStream(): AsyncGenerator<CustomerChang
   const changeStream = customersCollection.watch<
     Customer,
     | ChangeStreamInsertDocument<Customer>
-    | ChangeStreamUpdateDocument<Record<string, string>>
+    | ChangeStreamUpdateDocument<PartialCustomerFlat>
   >(
     [
       {
@@ -42,26 +42,13 @@ export async function* getCustomersChangesStream(): AsyncGenerator<CustomerChang
 }
 
 function getUpdateCustomerChange(
-  change: ChangeStreamUpdateDocument<Record<string, string>>
+  change: ChangeStreamUpdateDocument<PartialCustomerFlat>
 ): UpdateCustomerChange {
   return {
     operationType: "update",
     change: {
       _id: change.documentKey._id,
-      firstName: change.updateDescription.updatedFields?.["firstName"],
-      lastName: change.updateDescription.updatedFields?.["lastName"],
-      email: change.updateDescription.updatedFields?.["email"],
-      createdAt: change.updateDescription.updatedFields?.["createdAt"]
-        ? new Date(change.updateDescription.updatedFields?.["createdAt"])
-        : undefined,
-      address: {
-        line1: change.updateDescription.updatedFields?.["address.line1"],
-        line2: change.updateDescription.updatedFields?.["address.line2"],
-        postcode: change.updateDescription.updatedFields?.["address.postcode"],
-        city: change.updateDescription.updatedFields?.["address.city"],
-        state: change.updateDescription.updatedFields?.["address.state"],
-        country: change.updateDescription.updatedFields?.["address.country"],
-      },
+      updateFields: change.updateDescription.updatedFields,
       removeFields: change.updateDescription.removedFields,
     } as UpdateCustomerDocument,
   };

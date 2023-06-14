@@ -1,5 +1,5 @@
 import * as crypto from "crypto";
-import { Customer, PartialCustomer } from "../types/customer";
+import { Customer, PartialCustomerFlat } from "../types/customer";
 
 export function anonymiseCustomer(customer: Customer): Customer {
   return {
@@ -17,34 +17,45 @@ export function anonymiseCustomer(customer: Customer): Customer {
 }
 
 export function anonymisePartialCustomer(
-  partialCustomer: PartialCustomer
-): PartialCustomer {
-  return {
-    ...partialCustomer,
-    firstName: generateHashSafe(partialCustomer.firstName),
-    lastName: generateHashSafe(partialCustomer.lastName),
-    email:
-      partialCustomer.email !== undefined
-        ? generateHashSafe(partialCustomer.email) +
-          `@${partialCustomer.email.split("@")[1]}`
-        : undefined,
+  partialCustomer: PartialCustomerFlat
+): PartialCustomerFlat {
+  const anonymisedCustomer = { ...partialCustomer };
+  if (partialCustomer.firstName) {
+    anonymisedCustomer.firstName = generateHash(partialCustomer.firstName);
+  }
+  if (partialCustomer.lastName) {
+    anonymisedCustomer.lastName = generateHash(partialCustomer.lastName);
+  }
 
-    address: {
-      ...partialCustomer.address,
-      line1: generateHashSafe(partialCustomer.address?.line1),
-      line2: generateHashSafe(partialCustomer.address?.line2),
-      postcode: generateHashSafe(partialCustomer.address?.postcode),
-    },
-  };
+  if (partialCustomer.email) {
+    anonymisedCustomer.email =
+      generateHash(partialCustomer.email) +
+      `@${partialCustomer.email.split("@")[1]}`;
+  }
+
+  if (partialCustomer["address.line1"]) {
+    anonymisedCustomer["address.line1"] = generateHash(
+      partialCustomer["address.line1"]
+    );
+  }
+
+  if (partialCustomer["address.line2"]) {
+    anonymisedCustomer["address.line2"] = generateHash(
+      partialCustomer["address.line2"]
+    );
+  }
+
+  if (partialCustomer["address.postcode"]) {
+    anonymisedCustomer["address.postcode"] = generateHash(
+      partialCustomer["address.postcode"]
+    );
+  }
+
+  return anonymisedCustomer;
 }
 
 function generateHash(name: string) {
   const hash = crypto.createHash("sha1");
   hash.update(name);
   return hash.digest("base64").slice(0, 8);
-}
-
-function generateHashSafe(name?: string) {
-  if (!name) return undefined;
-  return generateHash(name);
 }

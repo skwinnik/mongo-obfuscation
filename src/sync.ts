@@ -34,8 +34,10 @@ if (process.argv.length > 2 && process.argv[2] === "--full-reindex") {
 run().then(
   () => {
     console.log("Done!");
+    process.exit(0);
   },
   (err) => {
     console.log(err.message);
+    process.exit(1);
   }
 );

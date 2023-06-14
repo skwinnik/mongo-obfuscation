@@ -1,5 +1,5 @@
 import * as crypto from "crypto";
-import { Customer, PartialCustomer } from "../../types/customer";
+import { Customer, PartialCustomer } from "../types/customer";
 
 export function anonymiseCustomer(customer: Customer): Customer {
   return {

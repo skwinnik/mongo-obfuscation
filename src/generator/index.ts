@@ -1,5 +1,4 @@
 import { Customer } from "../types/customer";
-import { ObjectId } from "mongodb";
 import { faker } from "@faker-js/faker";
 import { waitForDelay } from "../utils/waitForDelay";
 

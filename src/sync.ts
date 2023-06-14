@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 import { getCustomersChangesStream } from "./db";
-import { anonymiseCustomer, anonymisePartialCustomer } from "./db/anonymiser";
+import { anonymiseCustomer, anonymisePartialCustomer } from "./anonymiser";
 
 async function run() {
   const changeStream = getCustomersChangesStream();

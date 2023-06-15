@@ -29,7 +29,15 @@ export class WriteBuffer<T> {
     }
   }
 
-  public async flush(): Promise<void> {
+  public async close() {
+    console.log(
+      "buffer: writer closed, flushing changes: ",
+      this.buffer.length
+    );
+    await this.flush();
+  }
+
+  private async flush(): Promise<void> {
     if (this.bufferTimeoutId) {
       clearTimeout(this.bufferTimeoutId);
       this.bufferTimeoutId = null;

@@ -21,9 +21,7 @@ async function run() {
   for await (const customerUpdate of customersStream) {
     await anonymisedBufferedWriter.push(customerUpdate);
   }
-
-  console.log("sync: stream ended, flushing changes");
-  await anonymisedBufferedWriter.flush();
+  await anonymisedBufferedWriter.close();
 }
 
 if (process.argv.length > 2 && process.argv[2] === "--full-reindex") {

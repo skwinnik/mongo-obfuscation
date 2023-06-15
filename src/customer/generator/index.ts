@@ -12,8 +12,8 @@ function createRandomCustomer(): Customer {
       line2: faker.location.secondaryAddress(),
       postcode: faker.location.zipCode(),
       city: faker.location.city(),
-      state: faker.location.state(),
-      country: faker.location.country(),
+      state: faker.location.state({ abbreviated: true }),
+      country: faker.location.countryCode(),
     },
     createdAt: faker.date.past(),
   };
@@ -26,7 +26,7 @@ export async function* generateCustomers() {
     yield faker.helpers.multiple(createRandomCustomer, {
       count: {
         min: 1,
-        max: 100,
+        max: 10,
       },
     });
     await waitForDelay(200);

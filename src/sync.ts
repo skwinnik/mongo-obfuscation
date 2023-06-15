@@ -3,7 +3,7 @@ import "dotenv/config";
 import { getCustomerStream } from "./customer/events";
 import { loadResumeToken } from "./resumeToken";
 
-import { anonymisedWriter } from "./customer/anonymisedWriter";
+import { anonymisedBufferedWriter } from "./customer/anonymisedBufferedWriter";
 import { SyncMode } from "./types/syncMode";
 
 let MODE: SyncMode = SyncMode.Watch;
@@ -19,11 +19,11 @@ async function run() {
   const customersStream = getCustomerStream(MODE, resumeToken);
 
   for await (const customerUpdate of customersStream) {
-    await anonymisedWriter.push(customerUpdate);
+    await anonymisedBufferedWriter.push(customerUpdate);
   }
 
   console.log("sync: stream ended, flushing changes");
-  await anonymisedWriter.flush();
+  await anonymisedBufferedWriter.flush();
 }
 
 if (process.argv.length > 2 && process.argv[2] === "--full-reindex") {

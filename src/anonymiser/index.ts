@@ -1,6 +1,7 @@
 import * as crypto from "crypto";
 import { Customer, PartialCustomerFlat } from "../types/customer";
 import { CustomerEvent } from "../customer/events";
+import { faker } from "@faker-js/faker";
 
 export function anonymiseCustomerEvent(event: CustomerEvent): CustomerEvent {
   if (event.operationType === "insert" || event.operationType === "replace") {
@@ -79,5 +80,10 @@ function anonymisePartialCustomer(
 function generateHash(name: string) {
   const hash = crypto.createHash("sha1");
   hash.update(name);
-  return hash.digest("base64").slice(0, 8);
+
+  // I could have used a base62 encoding lib here, but I didn't want to add a new dependency
+  return hash
+    .digest("base64")
+    .replace(/[\+\/]/g, "0")
+    .slice(0, 8);
 }
